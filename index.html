@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Human Assist – Helping Hands, Near Home</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤝</text></svg>" />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --brand: #1D9E75; --brand-light: #E1F5EE; --brand-dark: #0F6E56;
+      --accent: #D85A30; --accent-light: #FAECE7;
+      --text: #1a1a18; --text-2: #5F5E5A; --text-3: #888780;
+      --bg: #F4F7F5; --surface: #FFFFFF;
+      --border: rgba(0,0,0,0.08); --border-2: rgba(0,0,0,0.13);
+      --radius: 14px; --radius-sm: 9px;
+      --shadow: 0 2px 16px rgba(0,0,0,0.07);
+      --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+    }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+    h1,h2,h3,h4 { font-family: 'Sora', sans-serif; }
+
+    /* ── LANDING ── */
+    #landing { display: flex; flex-direction: column; min-height: 100vh; }
+    .land-nav { display: flex; align-items: center; justify-content: space-between; padding: 18px 32px; background: white; border-bottom: 1px solid var(--border); }
+    .logo { font-family: 'Sora', sans-serif; font-size: 20px; font-weight: 700; color: var(--brand-dark); display: flex; align-items: center; gap: 8px; }
+    .land-nav-btns { display: flex; gap: 10px; }
+    .btn-outline { padding: 8px 20px; border: 1.5px solid var(--brand); border-radius: 8px; background: none; color: var(--brand-dark); font-size: 14px; font-weight: 500; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.15s; }
+    .btn-outline:hover { background: var(--brand-light); }
+    .btn-solid { padding: 8px 20px; border: none; border-radius: 8px; background: var(--brand); color: white; font-size: 14px; font-weight: 500; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: background 0.15s; }
+    .btn-solid:hover { background: var(--brand-dark); }
+    .hero { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 60px 24px; }
+    .hero-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 16px; background: var(--brand-light); color: var(--brand-dark); border-radius: 20px; font-size: 13px; font-weight: 500; margin-bottom: 24px; }
+    .hero h1 { font-size: clamp(32px, 6vw, 56px); font-weight: 700; line-height: 1.15; color: var(--text); margin-bottom: 18px; max-width: 700px; }
+    .hero h1 span { color: var(--brand); }
+    .hero p { font-size: 17px; color: var(--text-2); max-width: 520px; line-height: 1.7; margin-bottom: 36px; }
+    .hero-btns { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; margin-bottom: 56px; }
+    .hero-btn-main { padding: 14px 32px; background: var(--brand); color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer; font-family: 'Sora', sans-serif; transition: background 0.15s; }
+    .hero-btn-main:hover { background: var(--brand-dark); }
+    .hero-btn-sec { padding: 14px 32px; background: white; color: var(--text); border: 1.5px solid var(--border-2); border-radius: 10px; font-size: 16px; font-weight: 500; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: border-color 0.15s; }
+    .hero-btn-sec:hover { border-color: var(--brand); color: var(--brand-dark); }
+    .how-it-works { display: flex; gap: 24px; flex-wrap: wrap; justify-content: center; }
+    .how-card { background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; width: 200px; text-align: center; box-shadow: var(--shadow); }
+    .how-icon { font-size: 32px; margin-bottom: 10px; }
+    .how-card h4 { font-size: 14px; font-weight: 600; margin-bottom: 6px; }
+    .how-card p { font-size: 12px; color: var(--text-2); line-height: 1.5; }
+
+    /* ── AUTH ── */
+    #auth-screen { display: none; align-items: center; justify-content: center; min-height: 100vh; background: var(--bg); padding: 24px; }
+    .auth-card { background: white; border-radius: var(--radius); padding: 36px; width: 100%; max-width: 420px; box-shadow: var(--shadow-lg); }
+    .auth-logo { text-align: center; margin-bottom: 28px; }
+    .auth-logo div { font-family: 'Sora', sans-serif; font-size: 22px; font-weight: 700; color: var(--brand-dark); }
+    .auth-logo span { font-size: 36px; display: block; margin-bottom: 6px; }
+    .auth-tabs { display: flex; background: var(--bg); border-radius: 10px; padding: 4px; margin-bottom: 24px; }
+    .auth-tab { flex: 1; padding: 9px; text-align: center; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.15s; border: none; background: none; font-family: 'DM Sans', sans-serif; color: var(--text-2); }
+    .auth-tab.active { background: white; color: var(--text); box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+    .auth-form { display: flex; flex-direction: column; gap: 14px; }
+    .auth-form input, .auth-form select { padding: 11px 14px; border: 1px solid var(--border-2); border-radius: var(--radius-sm); font-size: 14px; font-family: 'DM Sans', sans-serif; outline: none; transition: border 0.15s; }
+    .auth-form input:focus, .auth-form select:focus { border-color: var(--brand); }
+    .auth-submit { padding: 13px; background: var(--brand); color: white; border: none; border-radius: var(--radius-sm); font-size: 15px; font-weight: 600; cursor: pointer; font-family: 'Sora', sans-serif; transition: background 0.15s; }
+    .auth-submit:hover { background: var(--brand-dark); }
+    .auth-switch { text-align: center; font-size: 13px; color: var(--text-2); margin-top: 4px; }
+    .auth-switch a { color: var(--brand-dark); cursor: pointer; text-decoration: none; font-weight: 500; }
+    .role-btns { display: flex; gap: 10px; }
+    .role-btn { flex: 1; padding: 12px 8px; border: 1.5px solid var(--border-2); border-radius: var(--radius-sm); text-align: center; cursor: pointer; transition: all 0.15s; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; background: none; color: var(--text-2); }
+    .role-btn.selected { border-color: var(--brand); background: var(--brand-light); color: var(--brand-dark); }
+    .role-btn span { display: block; font-size: 22px; margin-bottom: 4px; }
+
+    /* ── MAIN APP ── */
+    #app { display: none; flex-direction: column; min-height: 100vh; }
+    .top-nav { background: white; border-bottom: 1px solid var(--border); padding: 0 20px; display: flex; align-items: center; justify-content: space-between; height: 58px; position: sticky; top: 0; z-index: 100; }
+    .nav-logo { font-family: 'Sora', sans-serif; font-size: 17px; font-weight: 700; color: var(--brand-dark); display: flex; align-items: center; gap: 7px; }
+    .nav-tabs { display: flex; gap: 3px; }
+    .nav-tab { padding: 6px 13px; border-radius: 20px; font-size: 13px; font-weight: 500; cursor: pointer; border: none; background: none; color: var(--text-2); transition: all 0.15s; font-family: 'DM Sans', sans-serif; }
+    .nav-tab.active { background: var(--brand); color: white; }
+    .nav-tab:hover:not(.active) { background: var(--brand-light); color: var(--brand-dark); }
+    .nav-right { display: flex; align-items: center; gap: 10px; }
+    .nav-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--brand); color: white; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; cursor: pointer; font-family: 'Sora', sans-serif; }
+    .notif-dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; }
+
+    .screen { display: none; padding: 20px; max-width: 920px; margin: 0 auto; width: 100%; }
+    .screen.active { display: block; }
+
+    /* ── FEED ── */
+    .feed-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+    .feed-header h2 { font-size: 20px; font-weight: 600; }
+    .feed-header p { font-size: 13px; color: var(--text-3); }
+    .filters { display: flex; gap: 7px; flex-wrap: wrap; margin-bottom: 16px; }
+    .filter-btn { padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 500; cursor: pointer; border: 1px solid var(--border-2); background: white; color: var(--text-2); transition: all 0.15s; }
+    .filter-btn.active { background: var(--brand-light); border-color: var(--brand); color: var(--brand-dark); }
+    .task-grid { display: flex; flex-direction: column; gap: 12px; }
+    .task-card { background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; box-shadow: var(--shadow); transition: transform 0.15s, box-shadow 0.15s; cursor: pointer; }
+    .task-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+    .task-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
+    .task-title { font-family: 'Sora', sans-serif; font-size: 15px; font-weight: 600; }
+    .task-pay { font-family: 'Sora', sans-serif; font-size: 20px; font-weight: 700; color: var(--brand-dark); white-space: nowrap; }
+    .task-meta { display: flex; gap: 7px; flex-wrap: wrap; margin-bottom: 10px; }
+    .badge { display: inline-flex; align-items: center; gap: 3px; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 500; }
+    .bg { background: var(--brand-light); color: var(--brand-dark); }
+    .bo { background: var(--accent-light); color: var(--accent); }
+    .bgy { background: #F1EFE8; color: #5F5E5A; }
+    .bb { background: #E6F1FB; color: #185FA5; }
+    .task-desc { font-size: 13px; color: var(--text-2); line-height: 1.5; margin-bottom: 12px; }
+    .task-footer { display: flex; align-items: center; justify-content: space-between; }
+    .poster-info { display: flex; align-items: center; gap: 8px; }
+    .av { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; color: white; flex-shrink: 0; font-family: 'Sora', sans-serif; }
+    .poster-name { font-size: 12px; font-weight: 500; }
+    .poster-sub { font-size: 11px; color: var(--text-3); }
+    .apply-btn { padding: 8px 18px; background: var(--brand); color: white; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: background 0.15s; font-family: 'Sora', sans-serif; }
+    .apply-btn:hover { background: var(--brand-dark); }
+    .empty-state { text-align: center; padding: 60px 20px; color: var(--text-3); }
+    .empty-state div { font-size: 40px; margin-bottom: 12px; }
+
+    /* ── POST TASK ── */
+    .post-wrap { background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 28px; box-shadow: var(--shadow); }
+    .post-wrap h2 { font-size: 20px; margin-bottom: 6px; }
+    .post-wrap > p { font-size: 13px; color: var(--text-2); margin-bottom: 22px; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .fg { display: flex; flex-direction: column; gap: 6px; }
+    .fg.full { grid-column: 1 / -1; }
+    .fg label { font-size: 11px; font-weight: 600; color: var(--text-2); text-transform: uppercase; letter-spacing: 0.06em; }
+    .fg input, .fg select, .fg textarea { padding: 10px 13px; border: 1px solid var(--border-2); border-radius: var(--radius-sm); font-size: 14px; font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); outline: none; transition: border 0.15s; }
+    .fg input:focus, .fg select:focus, .fg textarea:focus { border-color: var(--brand); background: white; }
+    .fg textarea { min-height: 90px; resize: vertical; }
+    .cat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(105px, 1fr)); gap: 8px; margin: 8px 0 20px; }
+    .cat-btn { padding: 11px 8px; border: 1px solid var(--border-2); border-radius: var(--radius-sm); font-size: 12px; font-weight: 500; cursor: pointer; background: white; color: var(--text-2); text-align: center; transition: all 0.15s; }
+    .cat-btn.sel { border-color: var(--brand); background: var(--brand-light); color: var(--brand-dark); }
+    .cat-btn span { display: block; font-size: 20px; margin-bottom: 4px; }
+    .submit-btn { width: 100%; padding: 14px; background: var(--brand); color: white; border: none; border-radius: var(--radius-sm); font-size: 15px; font-weight: 700; cursor: pointer; margin-top: 10px; font-family: 'Sora', sans-serif; transition: background 0.15s; }
+    .submit-btn:hover { background: var(--brand-dark); }
+    .success-box { display: none; text-align: center; padding: 40px 20px; }
+    .success-box .si { font-size: 56px; margin-bottom: 14px; }
+    .success-box h3 { font-size: 22px; margin-bottom: 8px; }
+    .success-box p { font-size: 14px; color: var(--text-2); margin-bottom: 24px; }
+
+    /* ── CHAT ── */
+    .chat-layout { display: grid; grid-template-columns: 260px 1fr; background: white; border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); height: 560px; overflow: hidden; }
+    .chat-sidebar { border-right: 1px solid var(--border); overflow-y: auto; }
+    .chat-sidebar-head { padding: 16px; border-bottom: 1px solid var(--border); }
+    .chat-sidebar-head h3 { font-size: 15px; font-weight: 600; }
+    .chat-item { padding: 14px 16px; cursor: pointer; transition: background 0.1s; border-bottom: 1px solid var(--border); }
+    .chat-item:hover, .chat-item.active { background: var(--brand-light); }
+    .chat-item-row { display: flex; align-items: center; gap: 9px; margin-bottom: 4px; }
+    .chat-item-name { font-size: 13px; font-weight: 500; }
+    .chat-item-task { font-size: 11px; color: var(--text-3); padding-left: 39px; margin-bottom: 3px; }
+    .chat-item-prev { font-size: 12px; color: var(--text-2); padding-left: 39px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .chat-window { display: flex; flex-direction: column; }
+    .chat-head { padding: 14px 18px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+    .chat-head-info h4 { font-size: 14px; font-weight: 600; }
+    .chat-head-info p { font-size: 12px; color: var(--text-3); }
+    .chat-msgs { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+    .msg { max-width: 72%; }
+    .msg.sent { align-self: flex-end; }
+    .msg.recv { align-self: flex-start; }
+    .msg-bub { padding: 10px 14px; border-radius: 16px; font-size: 13px; line-height: 1.5; }
+    .sent .msg-bub { background: var(--brand); color: white; border-bottom-right-radius: 4px; }
+    .recv .msg-bub { background: #F1EFE8; color: var(--text); border-bottom-left-radius: 4px; }
+    .msg-time { font-size: 10px; color: var(--text-3); margin-top: 3px; }
+    .sent .msg-time { text-align: right; }
+    .chat-inp-row { padding: 12px 16px; border-top: 1px solid var(--border); display: flex; gap: 8px; align-items: center; }
+    .chat-inp { flex: 1; padding: 10px 16px; border: 1px solid var(--border-2); border-radius: 24px; font-size: 13px; font-family: 'DM Sans', sans-serif; background: var(--bg); outline: none; transition: border 0.15s; }
+    .chat-inp:focus { border-color: var(--brand); }
+    .send-btn { width: 38px; height: 38px; border-radius: 50%; background: var(--brand); color: white; border: none; cursor: pointer; font-size: 15px; display: flex; align-items: center; justify-content: center; transition: background 0.15s; }
+    .send-btn:hover { background: var(--brand-dark); }
+
+    /* ── WALLET ── */
+    .bal-card { background: linear-gradient(135deg, var(--brand-dark) 0%, #0a5240 100%); color: white; border-radius: var(--radius); padding: 28px; margin-bottom: 18px; }
+    .bal-label { font-size: 13px; opacity: 0.75; margin-bottom: 6px; }
+    .bal-amt { font-family: 'Sora', sans-serif; font-size: 38px; font-weight: 700; margin-bottom: 20px; }
+    .bal-btns { display: flex; gap: 10px; }
+    .bb-primary { padding: 9px 22px; background: white; color: var(--brand-dark); border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; }
+    .bb-sec { padding: 9px 22px; background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.3); border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer; font-family: 'DM Sans', sans-serif; }
+    .section-card { background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 22px; box-shadow: var(--shadow); margin-bottom: 16px; }
+    .section-card h3 { font-size: 15px; font-weight: 600; margin-bottom: 16px; }
+    .txn-item { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); }
+    .txn-item:last-child { border-bottom: none; }
+    .txn-icon { width: 42px; height: 42px; border-radius: 10px; background: var(--bg); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+    .txn-info { flex: 1; }
+    .txn-name { font-size: 14px; font-weight: 500; }
+    .txn-date { font-size: 12px; color: var(--text-3); }
+    .txn-amt { font-family: 'Sora', sans-serif; font-size: 15px; font-weight: 600; }
+    .credit { color: var(--brand-dark); }
+    .debit { color: var(--accent); }
+
+    /* ── PROFILE ── */
+    .prof-hero { background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 26px; box-shadow: var(--shadow); margin-bottom: 16px; display: flex; gap: 22px; align-items: flex-start; }
+    .prof-av { width: 76px; height: 76px; border-radius: 50%; background: var(--brand); color: white; display: flex; align-items: center; justify-content: center; font-size: 26px; font-weight: 700; flex-shrink: 0; font-family: 'Sora', sans-serif; }
+    .prof-info h2 { font-size: 21px; font-weight: 700; margin-bottom: 4px; }
+    .prof-role { font-size: 13px; color: var(--text-2); margin-bottom: 10px; }
+    .stars { color: #EF9F27; font-size: 14px; }
+    .stat-row { display: flex; gap: 24px; margin-top: 14px; }
+    .stat { text-align: center; }
+    .stat-num { font-family: 'Sora', sans-serif; font-size: 22px; font-weight: 700; color: var(--brand-dark); }
+    .stat-lbl { font-size: 11px; color: var(--text-3); }
+    .skill-tags { display: flex; flex-wrap: wrap; gap: 7px; }
+    .skill-tag { padding: 5px 13px; background: var(--brand-light); color: var(--brand-dark); border-radius: 20px; font-size: 12px; font-weight: 500; }
+    .review-item { padding: 13px 0; border-bottom: 1px solid var(--border); }
+    .review-item:last-child { border-bottom: none; }
+    .rev-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 3px; }
+    .rev-name { font-size: 13px; font-weight: 600; }
+    .rev-task { font-size: 11px; color: var(--text-3); margin-bottom: 5px; }
+    .rev-text { font-size: 13px; color: var(--text-2); line-height: 1.5; }
+
+    /* ── MODAL ── */
+    .modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 200; align-items: center; justify-content: center; }
+    .modal-bg.open { display: flex; }
+    .modal { background: white; border-radius: var(--radius); padding: 26px; width: 92%; max-width: 440px; box-shadow: var(--shadow-lg); }
+    .modal h3 { font-size: 18px; margin-bottom: 4px; }
+    .modal > p { font-size: 13px; color: var(--text-2); margin-bottom: 18px; }
+    .modal-task { background: var(--bg); border-radius: var(--radius-sm); padding: 14px; margin-bottom: 16px; }
+    .modal-task h4 { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+    .modal-task p { font-size: 13px; color: var(--text-2); }
+    .modal-actions { display: flex; gap: 10px; }
+    .btn-cancel { flex: 1; padding: 11px; border: 1px solid var(--border-2); border-radius: var(--radius-sm); background: none; font-size: 14px; cursor: pointer; font-family: 'DM Sans', sans-serif; color: var(--text-2); }
+    .btn-confirm { flex: 2; padding: 11px; background: var(--brand); color: white; border: none; border-radius: var(--radius-sm); font-size: 14px; font-weight: 700; cursor: pointer; font-family: 'Sora', sans-serif; }
+    .modal-note { margin-bottom: 14px; }
+    .modal-note textarea { width: 100%; padding: 10px 13px; border: 1px solid var(--border-2); border-radius: var(--radius-sm); font-size: 13px; font-family: 'DM Sans', sans-serif; background: var(--bg); min-height: 80px; resize: vertical; outline: none; }
+    .modal-note textarea:focus { border-color: var(--brand); background: white; }
+
+    /* ── TOAST ── */
+    .toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(80px); background: #1a1a18; color: white; padding: 12px 24px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 500; z-index: 300; transition: transform 0.3s; white-space: nowrap; }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+
+    @media (max-width: 640px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .chat-layout { grid-template-columns: 1fr; }
+      .chat-sidebar { display: none; }
+      .prof-hero { flex-direction: column; }
+      .nav-tabs .nav-tab span { display: none; }
+      .hero h1 { font-size: 28px; }
+      .land-nav { padding: 14px 18px; }
+      .hero { padding: 40px 18px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══ LANDING PAGE ═══ -->
+<div id="landing">
+  <nav class="land-nav">
+    <div class="logo">🤝 Human Assist</div>
+    <div class="land-nav-btns">
+      <button class="btn-outline" onclick="showAuth('login')">Sign in</button>
+      <button class="btn-solid" onclick="showAuth('register')">Join free</button>
+    </div>
+  </nav>
+  <div class="hero">
+    <div class="hero-badge">🌟 Community-powered helping network</div>
+    <h1>When your loved ones need help,<br><span>someone nearby is ready</span></h1>
+    <p>Connect family members who need assistance with trusted local helpers who are ready to earn and make a difference — right in your hometown.</p>
+    <div class="hero-btns">
+      <button class="hero-btn-main" onclick="showAuth('register')">Get started — it's free</button>
+      <button class="hero-btn-sec" onclick="showAuth('login')">I already have an account</button>
+    </div>
+    <div class="how-it-works">
+      <div class="how-card"><div class="how-icon">📋</div><h4>Post a task</h4><p>Describe what help is needed, when, and how much you'll pay</p></div>
+      <div class="how-card"><div class="how-icon">🙋</div><h4>Helper applies</h4><p>Nearby helpers see your task and send a request</p></div>
+      <div class="how-card"><div class="how-icon">✅</div><h4>Confirm & done</h4><p>Accept a helper, they complete the task, you pay them</p></div>
+      <div class="how-card"><div class="how-icon">⭐</div><h4>Rate & review</h4><p>Build trust in the community with honest reviews</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ AUTH SCREEN ═══ -->
+<div id="auth-screen">
+  <div class="auth-card">
+    <div class="auth-logo"><span>🤝</span><div>Human Assist</div></div>
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tab-login" onclick="switchAuthTab('login')">Sign in</button>
+      <button class="auth-tab" id="tab-register" onclick="switchAuthTab('register')">Create account</button>
+    </div>
+
+    <!-- LOGIN -->
+    <div id="form-login" class="auth-form">
+      <input type="email" placeholder="Email address" id="login-email" />
+      <input type="password" placeholder="Password" id="login-pass" />
+      <button class="auth-submit" onclick="doLogin()">Sign in</button>
+      <div class="auth-switch">Don't have an account? <a onclick="switchAuthTab('register')">Join free</a></div>
+    </div>
+
+    <!-- REGISTER -->
+    <div id="form-register" class="auth-form" style="display:none;">
+      <input type="text" placeholder="Full name" id="reg-name" />
+      <input type="email" placeholder="Email address" id="reg-email" />
+      <input type="tel" placeholder="Phone number" id="reg-phone" />
+      <input type="text" placeholder="Your city / town" id="reg-city" />
+      <div>
+        <div style="font-size:12px;font-weight:600;color:var(--text-2);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px;">I want to</div>
+        <div class="role-btns">
+          <button class="role-btn sel" id="role-both" onclick="setRole('both',this)"><span>🤝</span>Both</button>
+          <button class="role-btn" id="role-poster" onclick="setRole('poster',this)"><span>📋</span>Post tasks</button>
+          <button class="role-btn" id="role-helper" onclick="setRole('helper',this)"><span>🙋</span>Help others</button>
+        </div>
+      </div>
+      <input type="password" placeholder="Create a password" id="reg-pass" />
+      <button class="auth-submit" onclick="doRegister()">Create account</button>
+      <div class="auth-switch">Already have an account? <a onclick="switchAuthTab('login')">Sign in</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MAIN APP ═══ -->
+<div id="app">
+  <nav class="top-nav">
+    <div class="nav-logo">🤝 Human Assist</div>
+    <div class="nav-tabs">
+      <button class="nav-tab active" onclick="showScreen('feed')">Tasks</button>
+      <button class="nav-tab" onclick="showScreen('post')">+ Post</button>
+      <button class="nav-tab" onclick="showScreen('chat')">Chat</button>
+      <button class="nav-tab" onclick="showScreen('wallet')">Wallet</button>
+      <button class="nav-tab" onclick="showScreen('profile')">Profile</button>
+    </div>
+    <div class="nav-right">
+      <div class="notif-dot"></div>
+      <div class="nav-avatar" id="nav-av" onclick="showScreen('profile')">U</div>
+    </div>
+  </nav>
+
+  <!-- FEED -->
+  <div class="screen active" id="screen-feed">
+    <div class="feed-header">
+      <div><h2 id="feed-location">Tasks near you</h2><p id="feed-count">Loading...</p></div>
+    </div>
+    <div class="filters" id="filter-row"></div>
+    <div class="task-grid" id="task-grid"></div>
+  </div>
+
+  <!-- POST -->
+  <div class="screen" id="screen-post">
+    <div class="post-wrap">
+      <h2>Post a new task</h2>
+      <p>Describe what help is needed. Someone nearby will respond.</p>
+      <div id="post-inner">
+        <div style="font-size:11px;font-weight:600;color:var(--text-2);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px;">Category</div>
+        <div class="cat-grid" id="cat-grid"></div>
+        <div class="form-grid">
+          <div class="fg full"><label>Task title</label><input type="text" placeholder="e.g. Accompany my mother to the temple" id="pt-title" /></div>
+          <div class="fg full"><label>Description</label><textarea placeholder="Describe what's needed, timing, any special instructions..." id="pt-desc"></textarea></div>
+          <div class="fg"><label>Date needed</label><input type="date" id="pt-date" /></div>
+          <div class="fg"><label>Time</label><input type="time" id="pt-time" /></div>
+          <div class="fg"><label>Duration</label>
+            <select id="pt-dur"><option>30 minutes</option><option selected>1–2 hours</option><option>2–4 hours</option><option>Half day</option><option>Full day</option></select>
+          </div>
+          <div class="fg"><label>Pay (₹)</label><input type="number" placeholder="200" id="pt-pay" /></div>
+          <div class="fg full"><label>Location / area</label><input type="text" placeholder="e.g. Near Godavari bridge, Rajahmundry" id="pt-loc" /></div>
+          <div class="fg full"><label>Posting on behalf of</label>
+            <select id="pt-for"><option>Myself</option><option>My mother</option><option>My father</option><option>Other family member</option></select>
+          </div>
+        </div>
+        <button class="submit-btn" onclick="submitTask()">Post Task</button>
+      </div>
+      <div class="success-box" id="post-success">
+        <div class="si">✅</div>
+        <h3>Task posted!</h3>
+        <p>Helpers nearby will be notified. You'll receive requests soon.</p>
+        <button class="apply-btn" onclick="resetPost();showScreen('feed')">View task feed</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHAT -->
+  <div class="screen" id="screen-chat">
+    <div class="chat-layout">
+      <div class="chat-sidebar">
+        <div class="chat-sidebar-head"><h3>Messages</h3></div>
+        <div id="chat-list"></div>
+      </div>
+      <div class="chat-window">
+        <div class="chat-head">
+          <div class="av" id="chat-av" style="background:var(--brand);width:36px;height:36px;font-size:12px;"></div>
+          <div class="chat-head-info"><h4 id="chat-hname">Select a chat</h4><p id="chat-htask">—</p></div>
+        </div>
+        <div class="chat-msgs" id="chat-msgs"></div>
+        <div class="chat-inp-row">
+          <input class="chat-inp" id="chat-inp" placeholder="Type a message..." onkeydown="if(event.key==='Enter')sendMsg()" />
+          <button class="send-btn" onclick="sendMsg()">➤</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WALLET -->
+  <div class="screen" id="screen-wallet">
+    <div class="bal-card">
+      <div class="bal-label">Wallet balance</div>
+      <div class="bal-amt" id="bal-display">₹0</div>
+      <div class="bal-btns">
+        <button class="bb-primary" onclick="showToast('Withdrawal feature coming soon!')">Withdraw</button>
+        <button class="bb-sec" onclick="showToast('Add money feature coming soon!')">Add money</button>
+      </div>
+    </div>
+    <div class="section-card">
+      <h3>Transaction history</h3>
+      <div id="txn-list"></div>
+    </div>
+  </div>
+
+  <!-- PROFILE -->
+  <div class="screen" id="screen-profile">
+    <div class="prof-hero">
+      <div class="prof-av" id="prof-av">U</div>
+      <div style="flex:1;">
+        <div class="prof-info">
+          <h2 id="prof-name">—</h2>
+          <div class="prof-role" id="prof-role">—</div>
+          <div style="display:flex;align-items:center;gap:6px;">
+            <span class="stars">★★★★★</span>
+            <span style="font-size:13px;font-weight:600;">4.9</span>
+            <span style="font-size:12px;color:var(--text-3);">(18 reviews)</span>
+          </div>
+        </div>
+        <div class="stat-row">
+          <div class="stat"><div class="stat-num" id="stat-done">0</div><div class="stat-lbl">Tasks done</div></div>
+          <div class="stat"><div class="stat-num" id="stat-posted">0</div><div class="stat-lbl">Posted</div></div>
+          <div class="stat"><div class="stat-num" id="stat-earned">₹0</div><div class="stat-lbl">Earned</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="section-card">
+      <h3>Skills & availability</h3>
+      <div class="skill-tags">
+        <span class="skill-tag">Transport</span><span class="skill-tag">Errands</span>
+        <span class="skill-tag">Shopping</span><span class="skill-tag">Companionship</span>
+        <span class="skill-tag">Medical escort</span>
+      </div>
+      <div style="margin-top:12px;font-size:13px;color:var(--text-2);">Available weekends and evenings.</div>
+    </div>
+    <div class="section-card">
+      <h3>Recent reviews</h3>
+      <div id="prof-reviews"></div>
+    </div>
+    <div style="text-align:center;padding:16px;">
+      <button class="btn-outline" onclick="logout()" style="color:var(--accent);border-color:var(--accent);">Sign out</button>
+    </div>
+  </div>
+</div>
+
+<!-- APPLY MODAL -->
+<div class="modal-bg" id="modal">
+  <div class="modal">
+    <h3>Apply for this task</h3>
+    <p>Send a request to the poster. They'll confirm if you're a good fit.</p>
+    <div class="modal-task" id="modal-info">
+      <h4 id="modal-title">—</h4>
+      <p id="modal-details">—</p>
+    </div>
+    <div class="modal-note"><textarea placeholder="Hi! I'm available and happy to help. I have a bike and can be there on time." id="apply-note"></textarea></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn-confirm" onclick="confirmApply()">Send request ✓</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── DATA ──────────────────────────────────────────────
+const TASKS = [
+  {id:1,title:"Accompany to Durga temple",cat:"Companionship",pay:350,date:"Sat 29 Mar",time:"7:00 AM",loc:"Vijayawada",desc:"My mother needs someone to accompany her to the temple and back. Walk is about 15 min each way. She is 68 and moves slowly but is independent.",poster:"Ravi K.",ini:"RK",col:"#1D9E75",bc:"bg",urgent:false},
+  {id:2,title:"Pick up medicines from pharmacy",cat:"Errands",pay:150,date:"Tomorrow",time:"10:00 AM",loc:"Rajahmundry",desc:"Collect medicines from Sri Venkateswara Pharmacy on Main Road. Prescription will be shared on WhatsApp before you go.",poster:"Priya M.",ini:"PM",col:"#D85A30",bc:"bo",urgent:true},
+  {id:3,title:"Drop my dad to hospital checkup",cat:"Transport",pay:400,date:"Mon 31 Mar",time:"8:30 AM",loc:"Kakinada",desc:"Father needs to go to Apollo Hospital for a routine checkup. Would need the helper to wait and then drop back. Two-wheeler or auto ok.",poster:"Suresh B.",ini:"SB",col:"#185FA5",bc:"bb",urgent:false},
+  {id:4,title:"Grocery shopping for the week",cat:"Shopping",pay:200,date:"Sunday",time:"9:00 AM",loc:"Rajahmundry",desc:"Buy vegetables and groceries from the local market. List will be shared. Budget ~₹800. Helper keeps the receipt.",poster:"Lalitha V.",ini:"LV",col:"#993556",bc:"bg",urgent:false},
+  {id:5,title:"Help with electricity bill payment",cat:"Errands",pay:100,date:"Fri 28 Mar",time:"Any time",loc:"Eluru",desc:"Go to the APEPDCL office and pay the electricity bill. Will transfer the bill amount + service charge separately.",poster:"Mohan R.",ini:"MR",col:"#3B6D11",bc:"bgy",urgent:false},
+  {id:6,title:"Read aloud newspaper to grandpa",cat:"Companionship",pay:120,date:"Daily",time:"8:00 AM",loc:"Rajahmundry",desc:"Grandfather loves reading the newspaper but eyes are weak. Looking for someone to read the Telugu paper aloud for 30 mins each morning.",poster:"Divya S.",ini:"DS",col:"#533AB7",bc:"bb",urgent:false},
+];
+const CATS = [{id:"all",l:"All",i:"🌐"},{id:"Errands",l:"Errands",i:"📦"},{id:"Transport",l:"Transport",i:"🛵"},{id:"Medical",l:"Medical",i:"🏥"},{id:"Shopping",l:"Shopping",i:"🛍️"},{id:"Companionship",l:"Companionship",i:"🤝"},{id:"Other",l:"Other",i:"✨"}];
+const POST_CATS = [{id:"Errands",l:"Errands",i:"📦"},{id:"Transport",l:"Transport",i:"🛵"},{id:"Medical",l:"Medical",i:"🏥"},{id:"Shopping",l:"Shopping",i:"🛍️"},{id:"Companionship",l:"Companionship",i:"🤝"},{id:"Temple",l:"Temple/Worship",i:"🛕"},{id:"Other",l:"Other",i:"✨"}];
+const CONVOS = [
+  {name:"Ravi K.",task:"Accompany to Durga temple",ini:"RK",col:"#1D9E75",msgs:[{f:"them",t:"Hello! Are you available on Saturday morning?",ts:"10:20 AM"},{f:"me",t:"Yes I'm free after 6:30 AM. Happy to help!",ts:"10:23 AM"},{f:"them",t:"Great! My mother lives near the bus stand. Can you meet her there?",ts:"10:25 AM"},{f:"me",t:"Sure, I'll be there by 6:50 AM",ts:"10:26 AM"}]},
+  {name:"Priya M.",task:"Pick up medicines",ini:"PM",col:"#D85A30",msgs:[{f:"them",t:"Hi, the prescription is ready. I'll send you the photo.",ts:"9:05 AM"},{f:"me",t:"Got it, I'll head over after 10.",ts:"9:10 AM"}]},
+  {name:"Suresh B.",task:"Drop to hospital",ini:"SB",col:"#185FA5",msgs:[{f:"them",t:"My father has an 8:30 appointment, can you be there by 8:00?",ts:"Yesterday"}]},
+];
+const TXNS = [
+  {i:"🏥",n:"Drop to hospital – Suresh B.",d:"22 Mar 2026",a:"+₹400",type:"credit"},
+  {i:"🛕",n:"Temple escort – Ravi K.",d:"20 Mar 2026",a:"+₹350",type:"credit"},
+  {i:"🛍️",n:"Grocery shopping – Lalitha V.",d:"18 Mar 2026",a:"+₹200",type:"credit"},
+  {i:"💸",n:"Withdrawal to bank",d:"15 Mar 2026",a:"-₹700",type:"debit"},
+  {i:"💊",n:"Pharmacy errand – Priya M.",d:"12 Mar 2026",a:"+₹150",type:"credit"},
+];
+const REVIEWS = [
+  {name:"Ravi K.",stars:5,task:"Temple escort",text:"Arjun was so patient and kind with my mother. She felt very comfortable. Arrived on time and was respectful throughout."},
+  {name:"Suresh B.",stars:5,task:"Hospital drop",text:"Reliable and responsible. My father was nervous but Arjun put him at ease. Will definitely use again."},
+  {name:"Lalitha V.",stars:4,task:"Grocery shopping",text:"Got everything right from the list. Returned change and receipt. Good work!"},
+];
+
+// ── STATE ──────────────────────────────────────────────
+let user = JSON.parse(localStorage.getItem('ha_user') || 'null');
+let selectedRole = 'both';
+let activeCat = 'all';
+let selPostCat = null;
+let activeChat = 0;
+let openTaskId = null;
+let postedCount = 0;
+
+// ── INIT ──────────────────────────────────────────────
+window.onload = () => {
+  if (user) enterApp();
+  else { document.getElementById('landing').style.display = 'flex'; }
+};
+
+// ── AUTH ──────────────────────────────────────────────
+function showAuth(tab) {
+  document.getElementById('landing').style.display = 'none';
+  document.getElementById('auth-screen').style.display = 'flex';
+  switchAuthTab(tab);
+}
+function switchAuthTab(tab) {
+  document.getElementById('form-login').style.display = tab==='login' ? 'flex':'none';
+  document.getElementById('form-register').style.display = tab==='register' ? 'flex':'none';
+  document.getElementById('tab-login').classList.toggle('active', tab==='login');
+  document.getElementById('tab-register').classList.toggle('active', tab==='register');
+}
+function setRole(r, el) {
+  selectedRole = r;
+  document.querySelectorAll('.role-btn').forEach(b=>b.classList.remove('sel'));
+  el.classList.add('sel');
+}
+function doLogin() {
+  const email = document.getElementById('login-email').value.trim();
+  const pass = document.getElementById('login-pass').value;
+  if (!email || !pass) { showToast('Please fill in all fields'); return; }
+  const saved = JSON.parse(localStorage.getItem('ha_user') || 'null');
+  if (saved && saved.email === email) { user = saved; enterApp(); }
+  else {
+    user = { name: email.split('@')[0], email, city: 'Rajahmundry', role: 'both', balance: 1840, tasksDone: 23, posted: 5, earned: 4200 };
+    localStorage.setItem('ha_user', JSON.stringify(user)); enterApp();
+  }
+}
+function doRegister() {
+  const name = document.getElementById('reg-name').value.trim();
+  const email = document.getElementById('reg-email').value.trim();
+  const city = document.getElementById('reg-city').value.trim();
+  const pass = document.getElementById('reg-pass').value;
+  if (!name || !email || !pass) { showToast('Please fill in all required fields'); return; }
+  user = { name, email, city: city || 'Your city', role: selectedRole, balance: 0, tasksDone: 0, posted: 0, earned: 0 };
+  localStorage.setItem('ha_user', JSON.stringify(user));
+  enterApp();
+}
+function enterApp() {
+  document.getElementById('landing').style.display = 'none';
+  document.getElementById('auth-screen').style.display = 'none';
+  document.getElementById('app').style.display = 'flex';
+  document.getElementById('app').style.flexDirection = 'column';
+  renderAll();
+}
+function logout() {
+  localStorage.removeItem('ha_user');
+  user = null;
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('landing').style.display = 'flex';
+  showToast('Signed out successfully');
+}
+
+// ── RENDER ──────────────────────────────────────────────
+function renderAll() {
+  renderProfile();
+  renderFilters();
+  renderTasks();
+  renderPostCats();
+  renderChat();
+  renderWallet();
+  renderReviews();
+}
+function renderProfile() {
+  if (!user) return;
+  const ini = user.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  document.getElementById('nav-av').textContent = ini;
+  document.getElementById('prof-av').textContent = ini;
+  document.getElementById('prof-name').textContent = user.name;
+  document.getElementById('prof-role').textContent = `${user.role==='helper'?'Helper':user.role==='poster'?'Poster':'Helper & Poster'} · ${user.city}`;
+  document.getElementById('stat-done').textContent = user.tasksDone;
+  document.getElementById('stat-posted').textContent = user.posted + postedCount;
+  document.getElementById('stat-earned').textContent = '₹' + (user.earned/1000).toFixed(1) + 'k';
+  document.getElementById('bal-display').textContent = '₹' + user.balance.toLocaleString();
+}
+function renderFilters() {
+  document.getElementById('filter-row').innerHTML = CATS.map(c=>`
+    <button class="filter-btn ${c.id===activeCat?'active':''}" onclick="setFilter('${c.id}')">${c.i} ${c.l}</button>
+  `).join('');
+  document.getElementById('feed-location').textContent = `Tasks near ${user?.city || 'you'}`;
+  const count = activeCat==='all' ? TASKS.length : TASKS.filter(t=>t.cat===activeCat).length;
+  document.getElementById('feed-count').textContent = `${count} open task${count!==1?'s':''}`;
+}
+function setFilter(cat) { activeCat = cat; renderFilters(); renderTasks(); }
+function renderTasks() {
+  const list = activeCat==='all' ? TASKS : TASKS.filter(t=>t.cat===activeCat);
+  if (!list.length) { document.getElementById('task-grid').innerHTML = '<div class="empty-state"><div>🔍</div><p>No tasks in this category yet.</p></div>'; return; }
+  document.getElementById('task-grid').innerHTML = list.map(t=>`
+    <div class="task-card" onclick="openApply(${t.id})">
+      <div class="task-top">
+        <div class="task-title">${t.urgent?'🔴 ':''}${t.title}</div>
+        <div class="task-pay">₹${t.pay}</div>
+      </div>
+      <div class="task-meta">
+        <span class="badge ${t.bc}">${t.cat}</span>
+        <span class="badge bgy">📅 ${t.date}</span>
+        <span class="badge bgy">🕐 ${t.time}</span>
+        <span class="badge bgy">📍 ${t.loc}</span>
+      </div>
+      <div class="task-desc">${t.desc}</div>
+      <div class="task-footer">
+        <div class="poster-info">
+          <div class="av" style="background:${t.col};width:30px;height:30px;font-size:11px;">${t.ini}</div>
+          <div><div class="poster-name">${t.poster}</div><div class="poster-sub">⭐ 4.8 · Verified</div></div>
+        </div>
+        <button class="apply-btn" onclick="event.stopPropagation();openApply(${t.id})">Apply →</button>
+      </div>
+    </div>
+  `).join('');
+}
+function renderPostCats() {
+  document.getElementById('cat-grid').innerHTML = POST_CATS.map(c=>`
+    <button class="cat-btn ${selPostCat===c.id?'sel':''}" onclick="setPostCat('${c.id}',this)">
+      <span>${c.i}</span>${c.l}
+    </button>
+  `).join('');
+}
+function setPostCat(id) { selPostCat = id; renderPostCats(); }
+function renderChat() {
+  document.getElementById('chat-list').innerHTML = CONVOS.map((c,i)=>`
+    <div class="chat-item ${i===activeChat?'active':''}" onclick="openChat(${i})">
+      <div class="chat-item-row">
+        <div class="av" style="background:${c.col};width:28px;height:28px;font-size:11px;flex-shrink:0;">${c.ini}</div>
+        <div class="chat-item-name">${c.name}</div>
+      </div>
+      <div class="chat-item-task">${c.task}</div>
+      <div class="chat-item-prev">${c.msgs[c.msgs.length-1].t}</div>
+    </div>
+  `).join('');
+  loadMessages();
+}
+function openChat(i) { activeChat = i; renderChat(); }
+function loadMessages() {
+  const c = CONVOS[activeChat];
+  document.getElementById('chat-av').textContent = c.ini;
+  document.getElementById('chat-av').style.background = c.col;
+  document.getElementById('chat-hname').textContent = c.name;
+  document.getElementById('chat-htask').textContent = c.task;
+  const el = document.getElementById('chat-msgs');
+  el.innerHTML = c.msgs.map(m=>`
+    <div class="msg ${m.f==='me'?'sent':'recv'}">
+      <div class="msg-bub">${m.t}</div>
+      <div class="msg-time">${m.ts}</div>
+    </div>
+  `).join('');
+  el.scrollTop = el.scrollHeight;
+}
+function sendMsg() {
+  const inp = document.getElementById('chat-inp');
+  const text = inp.value.trim();
+  if (!text) return;
+  CONVOS[activeChat].msgs.push({f:'me',t:text,ts:'Now'});
+  inp.value = '';
+  loadMessages();
+}
+function renderWallet() {
+  document.getElementById('txn-list').innerHTML = TXNS.map(t=>`
+    <div class="txn-item">
+      <div class="txn-icon">${t.i}</div>
+      <div class="txn-info"><div class="txn-name">${t.n}</div><div class="txn-date">${t.d}</div></div>
+      <div class="txn-amt ${t.type}">${t.a}</div>
+    </div>
+  `).join('');
+}
+function renderReviews() {
+  document.getElementById('prof-reviews').innerHTML = REVIEWS.map(r=>`
+    <div class="review-item">
+      <div class="rev-top"><span class="rev-name">${r.name}</span><span class="stars">${'★'.repeat(r.stars)}${'☆'.repeat(5-r.stars)}</span></div>
+      <div class="rev-task">${r.task}</div>
+      <div class="rev-text">${r.text}</div>
+    </div>
+  `).join('');
+}
+
+// ── NAVIGATION ──────────────────────────────────────────────
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('screen-'+id).classList.add('active');
+  const screens = ['feed','post','chat','wallet','profile'];
+  document.querySelectorAll('.nav-tab')[screens.indexOf(id)]?.classList.add('active');
+}
+
+// ── TASK ACTIONS ──────────────────────────────────────────────
+function openApply(id) {
+  const t = TASKS.find(x=>x.id===id);
+  openTaskId = id;
+  document.getElementById('modal-title').textContent = t.title;
+  document.getElementById('modal-details').textContent = `${t.date} · ${t.time} · ${t.loc} · Pay: ₹${t.pay}`;
+  document.getElementById('modal').classList.add('open');
+}
+function closeModal() { document.getElementById('modal').classList.remove('open'); }
+function confirmApply() {
+  closeModal();
+  showToast('✅ Request sent! You\'ll be notified when accepted.');
+}
+function submitTask() {
+  const title = document.getElementById('pt-title').value.trim();
+  const pay = document.getElementById('pt-pay').value;
+  if (!title) { showToast('Please add a task title'); return; }
+  if (!selPostCat) { showToast('Please select a category'); return; }
+  postedCount++;
+  if (user) { user.posted = (user.posted||0) + 1; localStorage.setItem('ha_user', JSON.stringify(user)); }
+  document.getElementById('post-inner').style.display = 'none';
+  document.getElementById('post-success').style.display = 'block';
+  renderProfile();
+}
+function resetPost() {
+  document.getElementById('post-inner').style.display = 'block';
+  document.getElementById('post-success').style.display = 'none';
+  document.getElementById('pt-title').value = '';
+  document.getElementById('pt-desc').value = '';
+  document.getElementById('pt-pay').value = '';
+  selPostCat = null; renderPostCats();
+}
+
+// ── TOAST ──────────────────────────────────────────────
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'), 3000);
+}
+</script>
+</body>
+</html>
